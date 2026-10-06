@@ -24,6 +24,16 @@ export function fruit(kind: FlavorId, className = ''): string {
 const spriteUrl = './products/kiiero-pouches.webp';
 const spriteOrder: FlavorId[] = ['mango', 'strawberry', 'blueberry', 'banana', 'kiwi', 'tomato'];
 const productNames: Record<FlavorId, string> = { mango: 'Mango', strawberry: 'Strawberry', blueberry: 'Blueberry', banana: 'Banana', kiwi: 'Kiwi', tomato: 'Tomato' };
+// Follow the pouch silhouettes, excluding faint alpha residue around the sprite.
+// Shadows are then cast by the bags themselves, rather than a rectangular crop.
+const pouchOutlines: Record<FlavorId, string> = {
+  mango: 'M25 32Q25 10 43 10H403Q422 10 422 32C422 147 400 282 404 475C404 490 355 503 222 503C87 503 41 490 41 475C44 288 25 147 25 32Z',
+  strawberry: 'M27 32Q27 9 45 9H394Q413 9 413 32C413 147 393 282 397 475C397 490 348 502 220 502C90 502 43 490 43 475C46 288 27 147 27 32Z',
+  blueberry: 'M10 32Q10 9 28 9H384Q404 9 404 32C404 147 384 282 388 475C388 490 339 503 208 503C78 503 29 490 29 475C32 288 10 147 10 32Z',
+  banana: 'M25 26Q25 4 43 4H399Q419 4 419 26C419 147 400 282 403 472C403 487 353 499 219 499C89 499 38 487 38 472C41 288 25 147 25 26Z',
+  kiwi: 'M25 26Q25 4 43 4H394Q414 4 414 26C414 147 397 282 400 472C400 487 352 500 219 500C88 500 41 487 41 472C44 288 25 147 25 26Z',
+  tomato: 'M10 26Q10 3 28 3H383Q404 3 404 26C404 147 388 282 392 472C392 487 342 498 207 498C77 498 28 487 28 472C31 288 10 147 10 26Z',
+};
 let pouchSequence = 0;
 
 export function pouch(kind: FlavorId, className = ''): string {
@@ -33,7 +43,7 @@ export function pouch(kind: FlavorId, className = ''): string {
   const columnLeft = [108, 552, 1000][column];
   const clipId = `pouch-window-${kind}-${pouchSequence++}`;
   return `<svg class="pouch ${className}" viewBox="0 0 450 512" role="img" aria-label="KIIERO CRUNCH ${productNames[kind]} — packaging concept" data-flavor="${kind}">
-    <defs><clipPath id="${clipId}"><rect width="450" height="512" /></clipPath></defs>
+    <defs><clipPath id="${clipId}"><path d="${pouchOutlines[kind]}" /></clipPath></defs>
     <image href="${spriteUrl}" x="${-columnLeft}" y="${-row * 512}" width="1536" height="1024" preserveAspectRatio="none" clip-path="url(#${clipId})" />
   </svg>`;
 }
