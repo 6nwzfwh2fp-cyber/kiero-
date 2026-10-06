@@ -70,3 +70,5 @@ python3 tests/browser_smoke.py
 ```
 
 These checks exercise responsive layouts, mobile navigation, anchors, the exact Brevo embed URL, iframe accessibility and containment, the direct-form fallback, absence of local signup storage, privacy copy, dialogs and reduced-motion behavior. They do not validate Brevo's private contact list or submit production subscriptions. Browser tooling is a development-only environment dependency.
+
+With Pillow also installed, `python3 tests/hover_visual.py` checks the exported production page on port 4173. It compares the visible background below the hero bags during mouse entry and exit, including intermediate animation frames, at desktop and mobile sizes. Moving hero bags use no CSS shadow filter, avoiding rectangular filter clipping during compositing.

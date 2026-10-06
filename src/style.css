@@ -79,7 +79,9 @@ p, h1, h2, h3 { margin: 0; }
 .ring-two { width: 365px; height: 365px; border-style: dashed; border-color: #4b48384f; }
 .hero-visual:before { content: ''; position: absolute; inset: -10%; background: radial-gradient(ellipse closest-side at 50% 52%, #b8994926 0%, #b899490f 48%, #b8994900 100%); pointer-events: none; z-index: -2; }
 .hero-packs { position: absolute; inset: 0; }
-.hero-pack { position: absolute; filter: drop-shadow(3px 24px 16px #0008); transition: transform .5s; }
+/* Keep moving pouches out of filtered layers: some browsers clip their shadows
+   to a rectangular surface while the hover transform is being composited. */
+.hero-pack { position: absolute; transition: transform .5s; }
 .hero-pack .pouch { width: 100%; height: auto; }
 .pack-strawberry { width: 230px; left: -3%; top: 88px; transform: rotate(-16deg); z-index: 1; }
 .pack-blueberry { width: 230px; right: -2%; top: 86px; transform: rotate(15deg); z-index: 2; }
