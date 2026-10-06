@@ -7,7 +7,7 @@ from pathlib import Path
 from playwright.async_api import async_playwright
 
 BASE_URL = os.environ.get("KIIERO_TEST_URL", "http://127.0.0.1:5173")
-STORAGE_KEY = "kiiero-crunch:early-access:v1"
+BREVO_FORM_URL = "https://2b24de71.sibforms.com/v2/serve/MUIFAOTnc-fcuppGwnxbVPptwD0j1ihNQMKKeiYRICdFwAeXSV1MC4-hEgTqU5IGBtiMhrLOMLSJgRLBP8eCkrSOKumf5yMyDXyQ1R52dN6hPpu_mL_y-XHyjhJHlKSw20mgdI11N4HMC4rjNt4TMGLIi6HPkpYqGKiPTc1FVSs1nWty1DKBE9twq8brzY72ejw0CrLTJLEkXo0s5A=="
 
 
 async def main():
@@ -20,6 +20,15 @@ async def main():
         )
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
+        await page.add_init_script("""(() => {
+            if (window.top !== window) return;
+            window.signupStorageWrites = [];
+            const original = Storage.prototype.setItem;
+            Storage.prototype.setItem = function(key, value) {
+                window.signupStorageWrites.push(key);
+                return original.call(this, key, value);
+            };
+        })()""")
         await page.goto(BASE_URL, wait_until="networkidle")
         assert await page.title() == "KIIERO CRUNCH | Crunch Different"
         assert await page.locator("main > section").count() == 6
@@ -32,7 +41,7 @@ async def main():
                 "document.documentElement.scrollWidth === innerWidth"
             ), f"Horizontal overflow at {width}px"
             offscreen = await page.locator(
-                "h1,h2,h3,input,.button,.flavor-card"
+                "h1,h2,h3,.button,.flavor-card,#brevo-signup,.signup-fallback"
             ).evaluate_all(
                 "els => els.filter(el => { const r = el.getBoundingClientRect();"
                 "return r.width > 0 && (r.left < -1 || r.right > innerWidth + 1);"
@@ -55,33 +64,28 @@ async def main():
 
         await page.locator('.flavor-card a[href="#join"]').first.click()
         assert await page.evaluate("location.hash") == "#join"
-        assert await page.locator("#email").is_visible()
-        submit = page.locator('#newsletter-form button[type="submit"]')
-        await page.locator("#email").fill("not-an-email")
-        await submit.click()
-        assert await page.locator("#email").get_attribute("aria-invalid") == "true"
-        assert "needs a little fix" in await page.locator("#form-message").inner_text()
-        await page.locator("#email").fill("Snack.Fan@Example.com")
-        await submit.click()
-        assert "Bring on the crunch" in await page.locator("#form-message").inner_text()
-        saved = await page.evaluate(f"JSON.parse(localStorage.getItem('{STORAGE_KEY}'))")
-        assert len(saved) == 1 and saved[0]["email"] == "snack.fan@example.com"
-        assert saved[0]["joinedAt"]
+        frame = page.locator("#brevo-signup")
+        assert await frame.is_visible()
+        assert await frame.get_attribute("src") == BREVO_FORM_URL
+        assert "Brevo signup form" in await frame.get_attribute("title")
+        assert await frame.get_attribute("scrolling") == "auto"
+        assert await page.locator("#newsletter-form,#email,#form-message").count() == 0
+        fallback = page.locator(".signup-fallback")
+        assert await fallback.get_attribute("href") == BREVO_FORM_URL
+        assert await fallback.get_attribute("target") == "_blank"
+        assert "noopener" in await fallback.get_attribute("rel")
+        assert await page.evaluate("window.signupStorageWrites") == []
+        assert "saves your email on this device" not in await page.locator("#join").inner_text()
         await page.reload(wait_until="networkidle")
-        await page.locator("#email").fill("snack.fan@example.com")
-        await submit.click()
-        assert "already on this device" in await page.locator("#form-message").inner_text()
-        assert await page.evaluate(f"JSON.parse(localStorage.getItem('{STORAGE_KEY}')).length") == 1
-        await page.evaluate("() => { Storage.prototype.setItem = () => { throw new Error('blocked') }; }")
-        await page.locator("#email").fill("another@example.com")
-        await submit.click()
-        assert "couldn’t save" in await page.locator("#form-message").inner_text()
-        assert await submit.is_enabled()
-        print("PASS: email validation, normalization, persistence, deduplication and storage denial")
+        assert await frame.get_attribute("src") == BREVO_FORM_URL
+        assert await page.evaluate("window.signupStorageWrites") == []
+        print("PASS: owner-provided Brevo iframe, responsive containment, accessible title, direct-form fallback and no local signup storage")
+        print("NOT TESTED: live Brevo submission and appearance in the owner's private contact list")
 
         await page.locator('.footer-links [data-dialog="privacy"]').click()
         assert await page.locator("dialog").is_visible()
         assert "YOUR EMAIL" in await page.locator("#dialog-title").inner_text()
+        assert "sent directly to Brevo" in await page.locator("#dialog-content").inner_text()
         await page.keyboard.press("Escape")
         assert not await page.locator("dialog").is_visible()
         for dialog_id in ["terms", "contact", "instagram", "tiktok"]:

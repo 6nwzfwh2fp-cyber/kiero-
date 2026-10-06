@@ -9,7 +9,7 @@ import './style.css';
 import { flavors } from './catalog';
 import { pouch, fruit, burst, benefitArt } from './art';
 import { icon } from './icons';
-import { joinEarlyAccess } from './newsletter';
+import { newsletterEmbed } from './newsletter';
 
 const logo = (className = '') => `<a class="wordmark ${className}" href="#home" aria-label="KIIERO CRUNCH home"><span>KIIERO<span class="logo-dot" aria-hidden="true">✷</span></span><span>CRUNCH</span></a>`;
 const socialButtons = () => `<button class="social-button" data-dialog="instagram" aria-label="Instagram — coming soon">${icon('instagram')}</button><button class="social-button" data-dialog="tiktok" aria-label="TikTok — coming soon">${icon('tiktok')}</button>`;
@@ -131,13 +131,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       </div>
       <div class="join-form-wrap reveal">
         <div class="form-note marker">good taste. great timing. <span aria-hidden="true">↴</span></div>
-        <form id="newsletter-form" class="newsletter-form" novalidate>
-          <label for="email">YOUR EMAIL ADDRESS</label>
-          <div class="email-row"><input id="email" name="email" type="email" autocomplete="email" placeholder="Enter your email" required maxlength="254" aria-describedby="email-hint form-message"><button class="button" type="submit"><span>I KIIERO IT</span>${icon('arrow')}</button></div>
-          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
-          <p class="form-perks">Get early access, launch drops and special offers.</p>
-          <p id="email-hint" class="form-privacy">This preview saves your email on this device. No emails are sent yet.<br>By joining, you agree to our <button type="button" class="inline-button" data-dialog="privacy">Privacy Policy</button>.</p>
-        </form>
+        ${newsletterEmbed()}
         <div class="join-bottom"><span class="join-tiny-star" aria-hidden="true">✷</span><span>NO BORING SNACKS.<br>NO BORING INBOX.</span></div>
       </div>
     </section>
@@ -171,36 +165,9 @@ mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click',
 document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !mobileNav.hidden) { setMenuOpen(false); menuButton.focus(); } });
 window.matchMedia('(min-width: 901px)').addEventListener('change', (event) => { if (event.matches) setMenuOpen(false); });
 
-const form = document.querySelector<HTMLFormElement>('#newsletter-form')!;
-const emailInput = document.querySelector<HTMLInputElement>('#email')!;
-const formMessage = document.querySelector<HTMLParagraphElement>('#form-message')!;
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-  emailInput.removeAttribute('aria-invalid');
-  if (!emailInput.validity.valid || !emailInput.value.trim()) {
-    formMessage.textContent = 'That email needs a little fix. Try name@example.com.';
-    formMessage.className = 'form-message error';
-    emailInput.setAttribute('aria-invalid', 'true');
-    emailInput.focus();
-    return;
-  }
-  submit.disabled = true;
-  try {
-    const result = await joinEarlyAccess(emailInput.value);
-    formMessage.textContent = result === 'existing' ? 'You’re already on this device’s list. Excellent taste.' : 'You’re on this device’s list. Bring on the crunch!';
-    formMessage.className = 'form-message success';
-    emailInput.value = '';
-  } catch (error) {
-    formMessage.textContent = error instanceof Error ? error.message : 'Something went wrong. Please try again.';
-    formMessage.className = 'form-message error';
-  } finally { submit.disabled = false; }
-});
-emailInput.addEventListener('input', () => { emailInput.removeAttribute('aria-invalid'); formMessage.textContent = ''; });
-
 const dialog = document.querySelector<HTMLDialogElement>('.info-dialog')!;
 const dialogCopy: Record<string, [string, string]> = {
-  privacy: ['YOUR EMAIL. YOUR CALL.', '<p>This is a pre-launch preview. The signup form stores your email address and signup date only in this browser’s local storage. It does not send them to a server or subscribe you to a mailing service.</p><p>You can remove that information by clearing this site’s browser data. A complete privacy policy will be published before a live mailing service is connected.</p>'],
+  privacy: ['YOUR EMAIL. YOUR CALL.', '<p>When you submit the signup form, your email and any information you enter are sent directly to Brevo, our signup and contact management provider, for the KIIERO CRUNCH early-access list.</p><p>We use the list for launch updates, product news and special offers. If the form requests email confirmation, complete that step to finish subscribing. Marketing emails include an unsubscribe link.</p><p>This site does not save new signups in your browser’s local storage. <a href="https://www.brevo.com/legal/privacypolicy/" target="_blank" rel="noopener noreferrer">Read Brevo’s privacy policy (opens in a new tab).</a></p>'],
   terms: ['THE FINE PRINT. SOON.', '<p>KIIERO CRUNCH is coming soon. The products, flavor combinations and packaging shown here are concepts in development. Final ingredients, sizes and product information will be confirmed at launch.</p><p>Nothing is currently available to buy. Official terms will be published before ordering opens.</p>'],
   contact: ['LET’S TALK CRUNCH.', '<p>We’re getting our contact channels ready. Our official contact details will appear here before launch.</p><p>For now, join the early-access list and keep an eye on this space.</p>'],
   instagram: ['FEED YOUR CURIOSITY.', '<p>Our official Instagram is coming soon. We’ll add the verified profile here when it’s ready.</p><p>Until then, join the list for your first taste of KIIERO CRUNCH.</p>'],

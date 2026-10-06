@@ -1,22 +1,11 @@
-export type Subscriber = { email: string; joinedAt: string };
-const STORAGE_KEY = 'kiiero-crunch:early-access:v1';
+/** Public embed supplied by the owner. Brevo handles submissions and confirmation. */
+export const BREVO_FORM_URL = 'https://2b24de71.sibforms.com/v2/serve/MUIFAOTnc-fcuppGwnxbVPptwD0j1ihNQMKKeiYRICdFwAeXSV1MC4-hEgTqU5IGBtiMhrLOMLSJgRLBP8eCkrSOKumf5yMyDXyQ1R52dN6hPpu_mL_y-XHyjhJHlKSw20mgdI11N4HMC4rjNt4TMGLIi6HPkpYqGKiPTc1FVSs1nWty1DKBE9twq8brzY72ejw0CrLTJLEkXo0s5A==';
 
-/** Replace this adapter with the marketing provider's API when launch is ready. */
-export async function joinEarlyAccess(email: string): Promise<'joined' | 'existing'> {
-  const normalized = email.trim().toLowerCase();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) || normalized.length > 254) {
-    throw new Error('That email needs a little fix. Try name@example.com.');
-  }
-  try {
-    const stored: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const subscribers: Subscriber[] = Array.isArray(stored)
-      ? stored.filter((entry): entry is Subscriber => Boolean(entry && typeof entry.email === 'string' && typeof entry.joinedAt === 'string'))
-      : [];
-    if (subscribers.some((entry) => entry.email === normalized)) return 'existing';
-    subscribers.push({ email: normalized, joinedAt: new Date().toISOString() });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(subscribers));
-    return 'joined';
-  } catch {
-    throw new Error('Your browser couldn’t save your email. Please allow local storage and try again.');
-  }
+export function newsletterEmbed(): string {
+  return `<div class="newsletter-embed">
+    <iframe id="brevo-signup" class="brevo-frame" title="Join the KIIERO CRUNCH early-access list — Brevo signup form" width="540" height="305" src="${BREVO_FORM_URL}" loading="lazy" scrolling="auto" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+  <p class="form-perks">Get early access, launch drops and special offers.</p>
+  <p class="form-privacy">Sign up through Brevo for KIIERO CRUNCH updates. <button type="button" class="inline-button" data-dialog="privacy">Privacy Policy</button>.</p>
+  <a class="signup-fallback" href="${BREVO_FORM_URL}" target="_blank" rel="noopener noreferrer">Having trouble? Open the signup form <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>`;
 }
