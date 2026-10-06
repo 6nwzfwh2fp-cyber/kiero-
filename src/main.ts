@@ -9,7 +9,7 @@ import './style.css';
 import { flavors } from './catalog';
 import { pouch, fruit, burst, benefitArt } from './art';
 import { icon } from './icons';
-import { newsletterEmbed } from './newsletter';
+import { newsletterForm, setupNewsletter } from './newsletter';
 
 const logo = (className = '') => `<a class="wordmark ${className}" href="#home" aria-label="KIIERO CRUNCH home"><span>KIIERO<span class="logo-dot" aria-hidden="true">✷</span></span><span>CRUNCH</span></a>`;
 const socialButtons = () => `<button class="social-button" data-dialog="instagram" aria-label="Instagram — coming soon">${icon('instagram')}</button><button class="social-button" data-dialog="tiktok" aria-label="TikTok — coming soon">${icon('tiktok')}</button>`;
@@ -130,7 +130,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       </div>
       <div class="join-form-wrap reveal">
         <div class="form-note marker">good taste. great timing. <span aria-hidden="true">↴</span></div>
-        ${newsletterEmbed()}
+        ${newsletterForm()}
         <div class="join-bottom"><span class="join-tiny-star" aria-hidden="true">✷</span><span>NO BORING SNACKS.<br>NO BORING INBOX.</span></div>
       </div>
     </section>
@@ -150,6 +150,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </footer>
   <dialog class="info-dialog" aria-labelledby="dialog-title"><div class="dialog-inner"><button class="dialog-close" aria-label="Close dialog">${icon('close')}</button><span class="dialog-star" aria-hidden="true">✷</span><p class="eyebrow">KIIERO CRUNCH</p><h2 id="dialog-title"></h2><div id="dialog-content"></div><button class="button dialog-done">GOT IT ${icon('check')}</button></div></dialog>
 `;
+
+setupNewsletter();
 
 const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle')!;
 const mobileNav = document.querySelector<HTMLElement>('#mobile-nav')!;

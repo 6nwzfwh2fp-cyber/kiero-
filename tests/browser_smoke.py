@@ -8,6 +8,7 @@ from playwright.async_api import async_playwright
 
 BASE_URL = os.environ.get("KIIERO_TEST_URL", "http://127.0.0.1:5173")
 BREVO_FORM_URL = "https://2b24de71.sibforms.com/v2/serve/MUIFAOTnc-fcuppGwnxbVPptwD0j1ihNQMKKeiYRICdFwAeXSV1MC4-hEgTqU5IGBtiMhrLOMLSJgRLBP8eCkrSOKumf5yMyDXyQ1R52dN6hPpu_mL_y-XHyjhJHlKSw20mgdI11N4HMC4rjNt4TMGLIi6HPkpYqGKiPTc1FVSs1nWty1DKBE9twq8brzY72ejw0CrLTJLEkXo0s5A=="
+BREVO_FORM_ACTION = BREVO_FORM_URL.replace("/v2/serve/", "/serve/")
 
 
 async def main():
@@ -51,7 +52,7 @@ async def main():
                 "document.documentElement.scrollWidth === innerWidth"
             ), f"Horizontal overflow at {width}px"
             offscreen = await page.locator(
-                "h1,h2,h3,.button,.flavor-card,#brevo-signup,.signup-fallback"
+                "h1,h2,h3,.button,.flavor-card,#newsletter-form,.signup-input,.signup-fallback"
             ).evaluate_all(
                 "els => els.filter(el => { const r = el.getBoundingClientRect();"
                 "return r.width > 0 && (r.left < -1 || r.right > innerWidth + 1);"
@@ -74,12 +75,16 @@ async def main():
 
         await page.locator('.flavor-card a[href="#join"]').first.click()
         assert await page.evaluate("location.hash") == "#join"
-        frame = page.locator("#brevo-signup")
-        assert await frame.is_visible()
-        assert await frame.get_attribute("src") == BREVO_FORM_URL
-        assert "Brevo signup form" in await frame.get_attribute("title")
-        assert await frame.get_attribute("scrolling") == "auto"
-        assert await page.locator("#newsletter-form,#email,#form-message").count() == 0
+        form = page.locator("#newsletter-form")
+        assert await form.is_visible()
+        assert await form.get_attribute("action") == BREVO_FORM_ACTION
+        assert await form.get_attribute("method") == "post"
+        assert await page.locator("iframe").count() == 0
+        assert await form.locator('[name="EMAIL"]').get_attribute("type") == "email"
+        assert await form.locator('[name="EMAIL"]').get_attribute("autocomplete") == "email"
+        assert await form.locator('[name="locale"]').input_value() == "es"
+        assert await form.locator('[name="email_address_check"]').input_value() == ""
+        assert await form.locator('button[type="submit"]').inner_text() == "I KIIERO IT"
         fallback = page.locator(".signup-fallback")
         assert await fallback.get_attribute("href") == BREVO_FORM_URL
         assert await fallback.get_attribute("target") == "_blank"
@@ -87,9 +92,9 @@ async def main():
         assert await page.evaluate("window.signupStorageWrites") == []
         assert "saves your email on this device" not in await page.locator("#join").inner_text()
         await page.reload(wait_until="networkidle")
-        assert await frame.get_attribute("src") == BREVO_FORM_URL
+        assert await form.get_attribute("action") == BREVO_FORM_ACTION
         assert await page.evaluate("window.signupStorageWrites") == []
-        print("PASS: owner-provided Brevo iframe, responsive containment, accessible title, direct-form fallback and no local signup storage")
+        print("PASS: integrated Brevo HTML form, exact POST action and required fields, direct-form fallback and no local signup storage")
         print("NOT TESTED: live Brevo submission and appearance in the owner's private contact list")
 
         await page.locator('.footer-links [data-dialog="privacy"]').click()

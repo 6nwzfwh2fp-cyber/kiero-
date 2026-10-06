@@ -12,7 +12,7 @@ npm ci --cache /tmp/kiiero-npm-cache --no-audit --no-fund
 npm run dev
 ```
 
-Vite binds to all interfaces on port **5173**. No environment variables or private credentials are required. The newsletter form loads from Brevo's public embed and requires Internet access to the configured `sibforms.com` host.
+Vite binds to all interfaces on port **5173**. No environment variables or private credentials are required. Newsletter submissions require Internet access to the public Brevo form endpoint at `2b24de71.sibforms.com`.
 
 ```sh
 npm run build       # Strict TypeScript checking and optimized production assets
@@ -27,25 +27,25 @@ The existing checkout is already isolated. Do not create an additional Git workt
 - `src/main.ts`: reusable section helpers, rendering, navigation, dialogs and scroll enhancement.
 - `src/catalog.ts`: typed flavor data. Every flavor has `coming-soon` availability.
 - `src/art.ts`: accessible product sprite views and SVG ingredient illustrations.
-- `src/newsletter.ts`: owner-provided public Brevo form URL and reusable iframe markup.
+- `src/newsletter.ts`: reusable branded form, owner-provided Brevo POST action and submission handling.
 - `src/style.css`: responsive styles, hover effects and reduced-motion support.
 - `public/`: favicon, social sharing artwork and the optimized six-pouch WebP sprite.
 
-The homepage typography and illustrations are bundled locally. The Brevo iframe independently loads its provider-managed resources. Decorative SVGs are hidden from assistive technology; product pouches have descriptive labels.
+The homepage typography, illustrations and signup form are bundled locally. There is no embedded signup iframe or third-party form styling/script dependency. Decorative SVGs are hidden from assistive technology; product pouches have descriptive labels.
 
 The standalone HTML preview includes homepage scripts, styles, illustrations and fonts in one file. Open it in a modern browser to explore the homepage without a development server. Newsletter signup still requires access to Brevo; it is not an offline form.
 
 ## Brevo newsletter
 
-The Join the List section embeds the official Brevo form supplied by the owner, using its exact public URL in `src/newsletter.ts`. The iframe is responsive, labeled for assistive technology, and scrollable at the supplied 305px height. A direct link opens the same form in a new tab if embedding is blocked. All existing page CTAs scroll to this section.
+The Join the List section uses a native HTML form styled with KIIERO's charcoal background, local fonts and yellow I KIIERO IT button. There is no nested scrolling or duplicate Newsletter heading. The action is the exact `/serve/` endpoint from the owner's full Brevo HTML export. It preserves `EMAIL`, the empty `email_address_check` honeypot and `locale=es`. The input uses email validation, autocomplete, an accessible label and mobile-friendly text sizing. All signup CTAs scroll to this section.
 
-Brevo handles the form fields, validation, submission, confirmation, contact list and opt-in settings. No API keys are exposed or required. The homepage no longer stores signup emails in localStorage or generates its own success message. Earlier local browser entries are left untouched and are not automatically transferred to Brevo.
+Submission uses the same multipart FormData POST and `?isAjax=1` protocol as Brevo's official form script, without importing its large script or styles. It prevents duplicate submissions, displays a pending state and waits for an HTTP-successful JSON response with `success: true` before showing an acknowledgement. Brevo's confirmation message and optional HTTP(S) redirect are respected. Provider field errors, network failure, timeout, HTTP failure or unexpected responses preserve the entered email, restore the button and offer the direct hosted-form link. Requests are not automatically retried. The native form action also remains valid independently of the async handler.
 
-Edit fields, the submission button's copy, internal form colors and target contact list in Brevo's form editor. The homepage retains its charcoal background, typography, section heading, accents and surrounding layout; cross-origin iframe contents are styled by Brevo.
+Brevo controls contact-list assignment and opt-in settings. No API keys are exposed or required, and signup emails are not stored in localStorage. Earlier local entries are not automatically transferred. The UI lives in `src/newsletter.ts` and `src/style.css`; changes to Brevo's configured fields or captcha requirements require an updated HTML export and adapter review. The supplied export has no captcha or additional required fields.
 
 To verify the complete flow, submit an email you control through the published page, complete any confirmation step, and check the form's assigned list in Brevo → Contacts. Automated tests do not add fabricated subscribers to the live list. The private contact list cannot be verified from the public embed alone.
 
-Cloud validation needs network access to `2b24de71.sibforms.com` and `sibforms.com`; the saved network draft includes both hosts. Saving the draft does not apply it to the running machine. If the cloud proxy blocks the iframe, apply the network changes in environment settings before live validation. This cloud restriction does not configure visitors' browser access.
+Cloud validation needs network access to `2b24de71.sibforms.com`; `sibforms.com` also hosts Brevo's official script used as a protocol reference. The saved network draft includes both hosts. The provider's read-only response allowed the published GitHub Pages origin via CORS during validation. This does not verify a production submission or the private list. Never bypass TLS or submit fabricated contacts to troubleshoot connectivity.
 
 GitHub Pages serves the self-contained build on the `gh-pages` branch at https://6nwzfwh2fp-cyber.github.io/kiero-/. Source changes are saved on `main`. Publication should preserve the current `gh-pages` history and use a regular push, never a force push.
 
@@ -69,6 +69,8 @@ With Python Playwright and Chromium installed, while the development server runs
 python3 tests/browser_smoke.py
 ```
 
-These checks exercise responsive layouts, mobile navigation, anchors, the exact Brevo embed URL, iframe accessibility and containment, the direct-form fallback, absence of local signup storage, privacy copy, dialogs and reduced-motion behavior. They do not validate Brevo's private contact list or submit production subscriptions. Browser tooling is a development-only environment dependency.
+These checks exercise responsive layouts, mobile navigation, anchors, the exact Brevo POST action and required fields, form accessibility and containment, the direct-form fallback, absence of local signup storage, privacy copy, dialogs and reduced-motion behavior. They do not validate Brevo's private contact list or submit production subscriptions. Browser tooling is a development-only environment dependency.
+
+`python3 tests/newsletter_flow.py` targets the exported production page on port 4173. It intercepts every request to the provider host, tests invalid emails, pending and duplicate-submit states, multipart fields, provider acknowledgement, rejection, HTTP/network failures and unexpected responses. All subscription responses are simulated; no real contacts are created. Set `KIIERO_TEST_URL` to test another local build.
 
 With Pillow also installed, `python3 tests/hover_visual.py` checks the exported production page on port 4173. It compares the visible background below the hero bags during mouse entry and exit, including intermediate animation frames, at desktop and mobile sizes. Moving hero bags use no CSS shadow filter, avoiding rectangular filter clipping during compositing.
