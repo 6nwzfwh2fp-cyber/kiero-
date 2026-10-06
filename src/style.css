@@ -81,16 +81,16 @@ p, h1, h2, h3 { margin: 0; }
 .hero-packs { position: absolute; inset: 0; }
 .hero-pack { position: absolute; filter: drop-shadow(3px 24px 16px #0008); transition: transform .5s; }
 .hero-pack .pouch { width: 100%; height: auto; }
-.pack-spicy { width: 230px; left: -3%; top: 88px; transform: rotate(-16deg); z-index: 1; }
-.pack-mystery { width: 230px; right: -2%; top: 86px; transform: rotate(15deg); z-index: 2; }
-.pack-tropical { width: 262px; top: 37px; left: 50%; transform: translateX(-50%) rotate(-3deg); z-index: 3; }
-.hero-visual:hover .pack-spicy { transform: translateX(-6px) rotate(-19deg); }
-.hero-visual:hover .pack-mystery { transform: translateX(6px) rotate(18deg); }
-.hero-visual:hover .pack-tropical { transform: translateX(-50%) translateY(-6px) rotate(-1deg); }
+.pack-strawberry { width: 230px; left: -3%; top: 88px; transform: rotate(-16deg); z-index: 1; }
+.pack-blueberry { width: 230px; right: -2%; top: 86px; transform: rotate(15deg); z-index: 2; }
+.pack-mango { width: 262px; top: 37px; left: 50%; transform: translateX(-50%) rotate(-3deg); z-index: 3; }
+.hero-visual:hover .pack-strawberry { transform: translateX(-6px) rotate(-19deg); }
+.hero-visual:hover .pack-blueberry { transform: translateX(6px) rotate(18deg); }
+.hero-visual:hover .pack-mango { transform: translateX(-50%) translateY(-6px) rotate(-1deg); }
 .hero-doodle { position: absolute; width: 170px; z-index: -1; opacity: .78; }
 .fruit-art { width: 100%; height: auto; }
-.hero-pineapple { color: var(--yellow); left: -19px; top: -5px; transform: rotate(-24deg); }
-.hero-pepper { color: var(--coral); right: -55px; bottom: 36px; transform: rotate(-25deg); }
+.hero-mango { color: var(--yellow); left: -19px; top: -5px; transform: rotate(-24deg); }
+.hero-tomato { color: var(--coral); right: -55px; bottom: 36px; transform: rotate(-25deg); }
 .little-stars { color: var(--purple); position: absolute; right: 0; top: 0; font-size: 40px; }
 .little-stars span { position: absolute; right: 35px; top: 24px; font-size: 23px; color: var(--yellow); }
 .crunch-stamp { position: absolute; right: -23px; top: 18px; z-index: 5; background: var(--purple); color: var(--charcoal); width: 117px; height: 117px; border-radius: 50%; outline: 1px dashed var(--charcoal); outline-offset: -7px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transform: rotate(13deg); box-shadow: 3px 5px 0 #0003; }
@@ -121,13 +121,17 @@ h2 { font-family: 'Barlow Condensed', Impact, sans-serif; font-size: 57px; font-
 .card-topline { display: flex; justify-content: space-between; align-items: center; position: absolute; top: 17px; left: 19px; right: 19px; font-size: 8px; font-weight: 700; letter-spacing: 1px; z-index: 3; }
 .card-orbit { font-size: 22px; }
 .flavor-background-word { position: absolute; top: 44%; left: 50%; transform: translate(-50%,-50%) rotate(-9deg); font-family: 'Barlow Condensed',sans-serif; font-size: 99px; font-weight: 800; color: var(--charcoal); opacity: .11; white-space: nowrap; letter-spacing: -1px; }
-.flavor-mystery .flavor-background-word { font-size: 180px; opacity: .13; }
+.flavor-blueberry .flavor-background-word { opacity: .13; }
 .card-pouch { position: absolute; height: 258px; width: 181px; top: 35px; left: 50%; transform: translateX(-50%) rotate(-9deg); filter: drop-shadow(8px 13px 8px #30251245); transition: transform .5s; }
-.flavor-spicy .card-pouch { transform: translateX(-50%) rotate(8deg); }
-.flavor-mystery .card-pouch { transform: translateX(-50%) rotate(-5deg); }
+.flavor-strawberry .card-pouch { transform: translateX(-50%) rotate(8deg); }
+.flavor-blueberry .card-pouch { transform: translateX(-50%) rotate(-5deg); }
+.flavor-banana .card-pouch { transform: translateX(-50%) rotate(7deg); }
+.flavor-kiwi .card-pouch { transform: translateX(-50%) rotate(-6deg); }
+.flavor-tomato .card-pouch { transform: translateX(-50%) rotate(8deg); }
+.flavor-banana .card-fruit, .flavor-tomato .card-fruit { left: auto; right: -27px; }
 .flavor-card:hover .card-pouch { transform: translateX(-50%) translateY(-6px) rotate(0); }
 .card-fruit { position: absolute; width: 167px; left: -27px; bottom: -17px; color: var(--charcoal); opacity: .63; transform: rotate(-12deg); }
-.flavor-spicy .card-fruit { left: auto; right: -30px; transform: rotate(13deg); }
+.flavor-strawberry .card-fruit { left: auto; right: -30px; transform: rotate(13deg); }
 .coming-tag { position: absolute; right: 16px; bottom: 16px; padding: 7px 10px; background: var(--cream); color: var(--charcoal); border-radius: 2px; font-size: 7px; letter-spacing: .9px; font-weight: 700; transform: rotate(-4deg); }
 .flavor-content { padding: 25px 24px 22px; }
 .flavor-category { font-size: 7px; color: var(--muted); letter-spacing: 1.2px; }
@@ -234,14 +238,14 @@ h2 { font-family: 'Barlow Condensed', Impact, sans-serif; font-size: 57px; font-
 .will-reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s var(--delay, 0ms), transform .65s var(--delay, 0ms); }
 .will-reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-@media (min-width: 1500px) { .hero { min-height: 745px; }.hero-visual { height: 550px; }.pack-spicy { width: 250px; }.pack-mystery { width: 250px; }.pack-tropical { width: 280px; }.hero-caption { bottom: 27px; } }
+@media (min-width: 1500px) { .hero { min-height: 745px; }.hero-visual { height: 550px; }.pack-strawberry { width: 250px; }.pack-blueberry { width: 250px; }.pack-mango { width: 280px; }.hero-caption { bottom: 27px; } }
 @media (max-width: 1150px) {
   .container { width: calc(100% - 72px); }
   .desktop-nav { margin-left: 0; gap: 21px; }.header-actions { gap: 19px; }
   .hero { min-height: 645px; }.hero h1 { font-size: 125px; }.hero-eyebrow { font-size: 8px; letter-spacing: 1px; }
   .hero-visual { height: 475px; margin-left: 0; }.ring-one { width: 390px; height: 390px; }.ring-two { width: 300px; height: 300px; }
-  .pack-spicy { width: 197px; left: -2%; top: 91px; }.pack-mystery { width: 197px; right: -3%; top: 91px; }.pack-tropical { width: 229px; top: 51px; }
-  .hero-pineapple { width: 135px; top: 15px; left: -6px; }.hero-pepper { width: 140px; right: -37px; bottom: 43px; }
+  .pack-strawberry { width: 197px; left: -2%; top: 91px; }.pack-blueberry { width: 197px; right: -3%; top: 91px; }.pack-mango { width: 229px; top: 51px; }
+  .hero-mango { width: 135px; top: 15px; left: -6px; }.hero-tomato { width: 140px; right: -37px; bottom: 43px; }
   .crunch-stamp { width: 96px; height: 96px; right: -8px; top: 14px; }.crunch-stamp strong { font-size: 23px; }.crunch-stamp > span { font-size: 5px; }
   .hero-caption { font-size: 11px; bottom: 30px; left: 10px; }.pack-note { font-size: 5px; bottom: 5px; }
   .section-heading h2 { font-size: 49px; }.section-intro { font-size: 11px; }.flavor-grid { gap: 18px; }.flavor-content { padding-inline: 19px; }.flavor-content h3 { font-size: 24px; }
@@ -252,8 +256,8 @@ h2 { font-family: 'Barlow Condensed', Impact, sans-serif; font-size: 57px; font-
 @media (max-width: 900px) {
   .container { width: calc(100% - 56px); }.header-inner { height: 80px; }.desktop-nav { display: none; }.header-socials { display: none; }.menu-toggle { display: block; }.header-actions { gap: 15px; }
   .hero { min-height: 600px; padding-top: 36px; padding-bottom: 65px; }.hero h1 { font-size: 104px; }.hero-slogan { font-size: 26px; }.hero-eyebrow { font-size: 7px; letter-spacing: .6px; }.title-star { font-size: 36px; right: -28px; top: -8px; }
-  .hero-description { font-size: 14px; }.hero-visual { height: 440px; margin-left: -24px; }.pack-spicy { width: 170px; left: 0; top: 117px; }.pack-mystery { width: 170px; right: -3%; top: 114px; }.pack-tropical { width: 199px; top: 75px; }
-  .ring-one { width: 320px; height: 320px; top: 53%; }.ring-two { width: 240px; height: 240px; top: 53%; }.hero-pineapple { width: 120px; top: 25px; left: 0; }.hero-pepper { width: 110px; bottom: 48px; right: -18px; }.crunch-stamp { width: 85px; height: 85px; right: -3px; top: 41px; }.crunch-stamp strong { font-size: 21px; }.little-stars { top: 16px; right: 27px; font-size: 28px; }.little-stars span { font-size: 18px; }.hero-caption { font-size: 10px; left: 2px; bottom: 15px; }.pack-note { bottom: -3px; font-size: 4px; }
+  .hero-description { font-size: 14px; }.hero-visual { height: 440px; margin-left: -24px; }.pack-strawberry { width: 170px; left: 0; top: 117px; }.pack-blueberry { width: 170px; right: -3%; top: 114px; }.pack-mango { width: 199px; top: 75px; }
+  .ring-one { width: 320px; height: 320px; top: 53%; }.ring-two { width: 240px; height: 240px; top: 53%; }.hero-mango { width: 120px; top: 25px; left: 0; }.hero-tomato { width: 110px; bottom: 48px; right: -18px; }.crunch-stamp { width: 85px; height: 85px; right: -3px; top: 41px; }.crunch-stamp strong { font-size: 21px; }.little-stars { top: 16px; right: 27px; font-size: 28px; }.little-stars span { font-size: 18px; }.hero-caption { font-size: 10px; left: 2px; bottom: 15px; }.pack-note { bottom: -3px; font-size: 4px; }
   .section-space { padding-block: 78px; }.section-heading { flex-direction: column; align-items: start; gap: 18px; }.section-heading h2 { font-size: 53px; }.section-intro br { display: none; }.section-intro { font-size: 12px; }
   .flavor-grid { gap: 14px; }.flavor-visual { height: 264px; }.card-pouch { height: 228px; width: 160px; top: 27px; }.card-topline { font-size: 6px; left: 12px; right: 12px; top: 13px; }.flavor-content { padding: 22px 15px 19px; }.flavor-content h3 { font-size: 19px; }.flavor-category { font-size: 6px; letter-spacing: .8px; }.flavor-description { font-size: 11px; line-height: 1.7; min-height: 38px; }.flavor-ingredients { font-size: 9px; min-height: 45px; }.card-link { font-size: 6px; letter-spacing: .7px; }.card-fruit { width: 130px; }.coming-tag { font-size: 6px; right: 10px; bottom: 12px; padding: 6px; }.flavor-background-word { font-size: 76px; }
   .benefit { padding-inline: 12px; }.benefit h3 { font-size: 21px; }.benefit p { font-size: 10px; }
@@ -266,7 +270,7 @@ h2 { font-family: 'Barlow Condensed', Impact, sans-serif; font-size: 57px; font-
   html { scroll-padding-top: 28px; }.container { width: calc(100% - 40px); }.section-space { padding-block: 64px; }
   .header-inner { height: 74px; gap: 15px; }.wordmark { font-size: 24px; }.wordmark > span:last-child { font-size: 20px; }.header-actions { gap: 10px; }.button-small { min-height: 36px; font-size: 8px; padding: 9px 12px; gap: 16px; }.button-small .icon { width: 15px; }.menu-toggle { padding: 8px 0 8px 8px; }.menu-toggle .icon { width: 23px; }
   .hero { display: flex; flex-direction: column; min-height: 0; padding-top: 34px; padding-bottom: 49px; }.hero-copy { align-self: start; width: 100%; padding: 0; }.hero-eyebrow { font-size: 7px; letter-spacing: 1px; margin-bottom: 23px; }.hero h1 { font-size: clamp(98px, 26.6vw, 152px); letter-spacing: -2px; line-height: .83; }.title-star { right: -42px; font-size: 41px; top: -6px; }.hero-slogan { font-size: clamp(24px, 6.8vw, 35px); margin-top: 27px; }.hero-description { font-size: 14px; margin-top: 18px; margin-bottom: 21px; }.hero-copy > .button { min-height: 47px; padding: 13px 20px; font-size: 10px; gap: 40px; }.cta-note { font-size: 9px; margin-top: 10px; }
-  .hero-visual { width: 100%; height: 357px; margin: 17px 0 0; }.hero-ring { top: 48%; }.ring-one { width: 302px; height: 302px; }.ring-two { width: 231px; height: 231px; }.pack-spicy { width: 42%; max-width: 195px; top: 64px; left: 0; }.pack-mystery { width: 42%; max-width: 195px; top: 64px; right: -1%; }.pack-tropical { width: 49%; max-width: 220px; top: 29px; }.hero-pineapple { width: 119px; left: -25px; top: 6px; }.hero-pepper { width: 105px; right: -20px; bottom: 14px; }.crunch-stamp { right: -4px; top: 1px; width: 82px; height: 82px; }.crunch-stamp strong { font-size: 19px; }.crunch-stamp > span { font-size: 4.7px; }.little-stars { top: -14px; right: 94px; font-size: 23px; }.little-stars span { top: 19px; right: 10px; font-size: 13px; }.hero-caption { left: 0; bottom: 0; font-size: 9px; }.caption-arrow { font-size: 35px; top: -26px; }.pack-note { bottom: 0; right: 1px; font-size: 4px; letter-spacing: .7px; }.scroll-cue { bottom: 11px; font-size: 6px; letter-spacing: 1px; gap: 10px; }
+  .hero-visual { width: 100%; height: 357px; margin: 17px 0 0; }.hero-ring { top: 48%; }.ring-one { width: 302px; height: 302px; }.ring-two { width: 231px; height: 231px; }.pack-strawberry { width: 42%; max-width: 195px; top: 64px; left: 0; }.pack-blueberry { width: 42%; max-width: 195px; top: 64px; right: -1%; }.pack-mango { width: 49%; max-width: 220px; top: 29px; }.hero-mango { width: 119px; left: -25px; top: 6px; }.hero-tomato { width: 105px; right: -20px; bottom: 14px; }.crunch-stamp { right: -4px; top: 1px; width: 82px; height: 82px; }.crunch-stamp strong { font-size: 19px; }.crunch-stamp > span { font-size: 4.7px; }.little-stars { top: -14px; right: 94px; font-size: 23px; }.little-stars span { top: 19px; right: 10px; font-size: 13px; }.hero-caption { left: 0; bottom: 0; font-size: 9px; }.caption-arrow { font-size: 35px; top: -26px; }.pack-note { bottom: 0; right: 1px; font-size: 4px; letter-spacing: .7px; }.scroll-cue { bottom: 11px; font-size: 6px; letter-spacing: 1px; gap: 10px; }
   .marquee { padding-block: 12px; transform: rotate(-2deg); }.marquee-track { gap: 27px; }.marquee-track > span { font-size: 21px; }.marquee-track .marquee-star { font-size: 22px; }
   h2 { font-size: 43px; }.section-heading { margin-bottom: 28px; gap: 15px; }.section-heading h2 { font-size: 43px; }.section-heading .eyebrow { font-size: 8px; margin-bottom: 10px; }.section-intro { font-size: 11px; line-height: 1.7; max-width: 300px; }
   .flavor-grid { grid-template-columns: 1fr; gap: 22px; }.flavor-visual { height: 315px; }.card-pouch { height: 280px; width: 196px; top: 26px; }.card-topline { font-size: 8px; left: 18px; right: 18px; top: 16px; }.flavor-background-word { font-size: 104px; }.card-fruit { width: 172px; left: -23px; bottom: -6px; }.coming-tag { font-size: 7px; padding: 7px 10px; right: 16px; bottom: 15px; }.flavor-content { padding: 24px 22px 22px; }.flavor-category { font-size: 7px; letter-spacing: 1.2px; }.flavor-content h3 { font-size: 29px; margin-block: 11px 13px; }.flavor-description { font-size: 12px; min-height: 0; margin-bottom: 8px; }.flavor-ingredients { font-size: 10px; min-height: 0; }.card-link { font-size: 8px; letter-spacing: 1px; margin-top: 23px; padding-top: 17px; }.flavors-footnote { font-size: 8px; text-align: left; line-height: 1.8; padding-inline: 4px; margin-top: 19px; }
@@ -277,7 +281,7 @@ h2 { font-family: 'Barlow Condensed', Impact, sans-serif; font-size: 57px; font-
   .footer { flex-wrap: wrap; gap: 22px; padding-block: 29px; }.footer-brand { gap: 20px; }.footer-brand .wordmark { font-size: 23px; }.footer-brand .wordmark > span:last-child { font-size: 19px; }.footer-brand > span { font-size: 7px; }.footer-links { order: 3; width: 100%; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 12px; }.footer-links button { font-size: 9px; }.back-top { margin-left: auto; }.dialog-inner { padding: 37px 25px 29px; }.dialog-inner h2 { font-size: 38px; }
 }
 
-@media (min-width: 450px) and (max-width: 600px) { .hero-visual { height: 422px; margin-top: 21px; }.pack-spicy { top: 66px; left: 3%; }.pack-mystery { top: 66px; right: 1%; }.pack-tropical { top: 28px; }.hero-ring { top: 46%; }.ring-one { width: 355px; height: 355px; }.ring-two { width: 275px; height: 275px; }.hero-caption { bottom: 14px; }.pack-note { bottom: 7px; }.crunch-stamp { right: 8px; top: 1px; }.hero-pepper { bottom: 34px; }.hero-pineapple { width: 143px; top: 4px; left: -10px; } }
+@media (min-width: 450px) and (max-width: 600px) { .hero-visual { height: 422px; margin-top: 21px; }.pack-strawberry { top: 66px; left: 3%; }.pack-blueberry { top: 66px; right: 1%; }.pack-mango { top: 28px; }.hero-ring { top: 46%; }.ring-one { width: 355px; height: 355px; }.ring-two { width: 275px; height: 275px; }.hero-caption { bottom: 14px; }.pack-note { bottom: 7px; }.crunch-stamp { right: 8px; top: 1px; }.hero-tomato { bottom: 34px; }.hero-mango { width: 143px; top: 4px; left: -10px; } }
 @media (max-width: 360px) { .container { width: calc(100% - 32px); }.hero h1 { font-size: 93px; }.title-star { right: -32px; font-size: 32px; }.hero-eyebrow { letter-spacing: .6px; font-size: 6.5px; }.hero-visual { height: 326px; }.crunch-stamp { width: 70px; height: 70px; }.crunch-stamp strong { font-size: 17px; }.crunch-stamp > span { font-size: 4px; }.ring-one { width: 268px; height: 268px; }.hero-caption { font-size: 8px; }.pack-note { font-size: 3.5px; }.section-heading h2 { font-size: 38px; }.flavor-visual { height: 290px; }.card-pouch { height: 259px; width: 181px; }.join-copy h2 { font-size: 59px; }.closing-details .marker { font-size: 15px; }.story-copy h2 { font-size: 49px; }.why-heading h2 { font-size: 34px; }.benefit h3 { font-size: 20px; } }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; }.will-reveal { opacity: 1; transform: none; } }

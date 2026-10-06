@@ -9,7 +9,10 @@ const scriptTag = html.match(/<script[^>]+src="([^"]+)"[^>]*><\/script>/);
 const cssTag = html.match(/<link[^>]+href="([^"]+\.css)"[^>]*>/);
 if (!scriptTag || !cssTag) throw new Error('Run npm run build before exporting the preview.');
 
-const js = await readFile(resolve(root, `dist${scriptTag[1]}`), 'utf8');
+let js = await readFile(resolve(root, `dist${scriptTag[1]}`), 'utf8');
+// Keep the published single-file homepage portable, including the product sprite.
+const productSprite = await readFile(resolve(root, 'dist/products/kiiero-pouches.webp'));
+js = js.replaceAll('./products/kiiero-pouches.webp', `data:image/webp;base64,${productSprite.toString('base64')}`);
 const cssPath = resolve(root, `dist${cssTag[1]}`);
 let css = await readFile(cssPath, 'utf8');
 for (const match of [...css.matchAll(/url\(([^)]+)\)/g)]) {

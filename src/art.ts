@@ -1,46 +1,40 @@
-let sequence = 0;
+import type { FlavorId } from './catalog';
 
-/** Lightweight original vector artwork. No image downloads or layout shifts. */
-export function fruit(kind: 'tropical' | 'spicy' | 'mystery', className = ''): string {
-  const chalk = `fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"`;
-  const drawings = {
-    tropical: `<g ${chalk}><path d="M111 79c-16-22-30-21-38-25l10 28-26-12 14 26-23 1 26 17"/><path d="M100 79c0-26 12-40 12-40l9 33 18-23-4 31 23-12-12 24"/><path d="M96 91c29-8 55 13 48 48-7 33-34 52-55 43-25-11-36-38-26-63 6-15 18-24 33-28Z"/><path d="m80 103 49 61m-62-40 40 51m-20-82 52 56m-62 10 58-39m-65 23 64-40m-42 75 41-28"/><path d="M146 160c32 0 46-19 56-49 5 55-27 91-57 64m56-64-6-7m-42 63 9-5"/><path d="M55 164c-32-3-48 28-32 48 14 21 40 18 55 2 17-19 5-46-12-48m-13-1c-1-10 4-17 10-22m-7 21c17 1 26-7 25-16-12-1-21 3-25 16"/></g>`,
-    spicy: `<g ${chalk}><path d="M104 112c-26-20-64-9-65 20-3 35 25 54 53 46 30 10 57-17 45-43-6-14-17-22-33-23Z"/><path d="m91 112-12-14 15 3 6-17 5 19 18-5-13 16m-12-13 2-21"/><path d="M46 132c-6 10-2 22 5 30m83 32c43 11 68-17 71-50-21 26-50 20-65 36-8 8-9 12-6 14Zm63-45 12-13 10 5m-62 39 17-4"/><path d="M143 84c-15 12-14 37-3 52 15-4 28-13 33-26 8-21-3-38-14-36m-16 10 14 40m-5-44 14 30m-33-6 30-13m-30 26 33-13m-27 24 19-9m-7-40 9-20m-24 41-10-29m37 10 8-25"/><path d="M41 206c10-9 32-9 42 1m-35 5c7-6 21-6 27 0"/></g>`,
-    mystery: `<g ${chalk}><path d="M96 70c-31-2-54 26-35 47m15-21c-10-13 5-28 20-25 24 2 25 26 11 36-19 12-22 17-22 34"/><path d="M90 159h1" stroke-width="8"/><path d="m163 91 7 16 17 4-16 8-4 17-7-15-18-4 17-8Zm-128 53 4 11 12 3-10 6-3 13-5-11-12-3 11-6m100 20 8 17 20 3-17 10-4 19-10-17-19-4 17-8"/><path d="m146 54 6-9m-98 13-9-5m24 133-6 10m121-44 11 3"/></g>`,
+/** Ingredient doodles complement the supplied pouch art. */
+export function fruit(kind: FlavorId, className = ''): string {
+  const chalk = 'fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+  const kiwiSeeds = Array.from({ length: 14 }, (_, index) => {
+    const angle = index * Math.PI * 2 / 14;
+    const x = 112 + Math.cos(angle) * 38;
+    const y = 134 + Math.sin(angle) * 43;
+    return `<path d="M${x.toFixed(1)} ${y.toFixed(1)}l${(Math.cos(angle) * 6).toFixed(1)} ${(Math.sin(angle) * 6).toFixed(1)}"/>`;
+  }).join('');
+  const drawings: Record<FlavorId, string> = {
+    mango: '<path d="M102 71c-35-7-64 17-61 54 4 43 36 72 68 62 34-11 58-48 44-80-9-23-28-32-51-36Z"/><path d="M103 70c0-19 13-32 27-36m-19 22c17-1 36-9 39-27-19-3-39 11-39 27m-58 59c-3 27 12 50 32 59"/><path d="M148 125c14-22 46-28 53-9 8 26-12 62-32 72-14 6-27-3-26-19m16-23 20 31m-30-15 43-13m-34-17 16 52"/>',
+    strawberry: '<path d="M118 85c-37-13-63-2-65 31-2 28 24 65 55 86 34-23 64-53 67-82 3-34-26-49-57-35Z"/><path d="m93 85-20-18 28 4 14-25 9 26 28-9-19 24m-18-15 3-34"/><path d="m78 114 2 5m30-8 1 5m31-1-2 5m-50 17 2 5m31-7-1 5m-22 25 2 5m39-19-2 4m-21 31-1 4"/>',
+    blueberry: '<circle cx="88" cy="110" r="39"/><circle cx="151" cy="154" r="42"/><circle cx="71" cy="174" r="28"/><path d="m80 80 7 12 13-5-6 13 10 10-15-2-7 13-3-15-15-4 14-6Zm70 45 6 13 15-2-11 10 6 14-14-7-12 9 3-15-11-10 15 1m-93 18 7 10 12-2-7 11 4 10-11-5-9 6 2-11-7-7 10-2M134 73c20-26 45-22 59-15-8 24-32 31-59 15m6-3 30-8"/>',
+    banana: '<path d="M63 66c-17 72 28 124 101 113 23-4 37-19 41-36-62 29-107 5-121-71Z"/><path d="m65 63 0-13 15-2 5 15m-17 20c-1 49 37 92 87 80m45-25 10-4 4 11-11 6"/><path d="M92 74c24-12 41-3 46 16-13-1-28 6-29 22m-27-43c-26-3-42 18-39 39 15-18 31-13 43-12m-7-27c-4-24 9-40 22-39l-1 44"/>',
+    kiwi: `<ellipse cx="111" cy="134" rx="65" ry="74"/><ellipse cx="111" cy="134" rx="58" ry="67"/><ellipse cx="111" cy="134" rx="18" ry="24"/>${kiwiSeeds}<path d="M149 71c28-22 60-7 61 23 1 22-13 44-29 52m-18-69 5-5m19 14 3-3m-3 24 4-4m-15 25 3-3"/>`,
+    tomato: '<path d="M115 86c-33-17-71-3-73 31-3 40 28 72 68 68 40 5 72-25 69-63-3-34-29-48-64-36Z"/><path d="m109 87-23-23 26 7 9-28 6 29 26-11-18 23 5 19-22-11-21 12 8-19m15-13 4-34"/><path d="M59 117c-4 18 3 37 14 46m105 10c17-18 40-16 43 6 3 19-8 35-26 34-18-2-27-21-17-40Zm7 9 25 13m-11-28-3 34m-17-1 34-21"/>',
   };
-  return `<svg class="fruit-art ${className}" width="240" height="240" viewBox="0 0 240 240" aria-hidden="true">${drawings[kind]}</svg>`;
+  return `<svg class="fruit-art ${className}" width="240" height="240" viewBox="0 0 240 240" aria-hidden="true"><g ${chalk}>${drawings[kind]}</g></svg>`;
 }
 
-export function pouch(kind: 'tropical' | 'spicy' | 'mystery', className = ''): string {
-  const id = `pouch-${sequence++}`;
-  const color = { tropical: '#edb344', spicy: '#e7745e', mystery: '#ad97c5' }[kind];
-  const deep = { tropical: '#c58e23', spicy: '#bc4635', mystery: '#7e639b' }[kind];
-  const title = { tropical: ['ISLAND', 'CRUSH'], spicy: ['HOT', 'MESS'], mystery: ['NEW', 'FLAVOR'] }[kind];
-  const subtitle = { tropical: 'TROPICAL FRUIT CRUNCH', spicy: 'SWEET + SPICY CRUNCH', mystery: 'COMING SOON' }[kind];
-  return `<svg class="pouch ${className}" viewBox="0 0 280 400" role="img" aria-label="KIIERO CRUNCH ${title.join(' ')} concept pouch, approximately 1.7 ounces">
-    <defs>
-      <linearGradient id="${id}-body" x1="0" x2="1"><stop stop-color="#10110f"/><stop offset=".13" stop-color="#30312a"/><stop offset=".3" stop-color="#20211d"/><stop offset=".78" stop-color="#181916"/><stop offset="1" stop-color="#38392f"/></linearGradient>
-      <linearGradient id="${id}-band" x1="0" x2="1"><stop stop-color="${deep}"/><stop offset=".22" stop-color="${color}"/><stop offset=".72" stop-color="${color}"/><stop offset="1" stop-color="${deep}"/></linearGradient>
-      <linearGradient id="${id}-shine"><stop stop-color="#ffffff" stop-opacity=".12"/><stop offset=".25" stop-color="#ffffff" stop-opacity="0"/><stop offset=".8" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#ffffff" stop-opacity=".06"/></linearGradient>
-      <clipPath id="${id}-clip"><path d="M37 18Q140 10 243 18L239 47Q243 139 251 289L256 362Q250 385 225 388H55Q30 387 24 362L29 289Q37 140 41 47Z"/></clipPath>
-    </defs>
-    <path d="M37 18Q140 10 243 18L239 47Q243 139 251 289L256 362Q250 385 225 388H55Q30 387 24 362L29 289Q37 140 41 47Z" fill="url(#${id}-body)" stroke="#44443a" stroke-width=".7"/>
-    <g clip-path="url(#${id}-clip)">
-      <path d="M22 199Q98 177 165 201T261 205V359H20Z" fill="url(#${id}-band)"/>
-      <path d="M30 351Q150 343 251 351L253 379H27Z" fill="${deep}" opacity=".3"/>
-      <g transform="translate(79 136) scale(.50)" style="color:#f4f0df" opacity=".9">${fruit(kind).replace('class="fruit-art "', 'style="width:240px;height:240px"')}</g>
-      <path d="M29 19h219v368H29Z" fill="url(#${id}-shine)"/>
-      <path d="m47 49-8 298 17 29m180-326 9 300-15 26" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="2"/>
-    </g>
-    <path d="M42 27q98-5 195 0m-195 5q98-5 195 0m-195 7q98-5 195 0" stroke="#646354" stroke-width="1" opacity=".45"/>
-    <path d="M42 49h196" stroke="#0b0c0a" stroke-width="3"/><path d="M37 21v7m206-7v7" stroke="#99917b" stroke-width="2"/>
-    <text x="140" y="97" text-anchor="middle" fill="#f4f0df" font-family="'Barlow Condensed',Impact,sans-serif" font-size="50" font-weight="800" letter-spacing="-1">KIIERO</text>
-    <text x="140" y="132" text-anchor="middle" fill="#f4f0df" font-family="'Barlow Condensed',Impact,sans-serif" font-size="38" font-weight="800" letter-spacing="2">CRUNCH</text>
-    <text x="140" y="152" text-anchor="middle" fill="${color}" font-family="'DM Sans',sans-serif" font-size="8" font-weight="700" letter-spacing="2.2">CRUNCH DIFFERENT.</text>
-    <text x="140" y="270" text-anchor="middle" fill="#25251e" font-family="'Permanent Marker',cursive" font-size="33" transform="rotate(-5 140 270)">${title[0]}</text>
-    <text x="140" y="307" text-anchor="middle" fill="#25251e" font-family="'Permanent Marker',cursive" font-size="36" transform="rotate(-5 140 307)">${title[1]}</text>
-    <text x="140" y="329" text-anchor="middle" fill="#25251e" font-family="'DM Sans',sans-serif" font-size="8" font-weight="700" letter-spacing="1">${subtitle}</text>
-    <text x="140" y="370" text-anchor="middle" fill="#e6e1ce" font-family="'DM Sans',sans-serif" font-size="8" letter-spacing="1">FREEZE-DRIED SNACKS · 1.7 OZ (48g)</text>
+/** One cached image contains all six reference-derived product cutouts. */
+const spriteUrl = './products/kiiero-pouches.webp';
+const spriteOrder: FlavorId[] = ['mango', 'strawberry', 'blueberry', 'banana', 'kiwi', 'tomato'];
+const productNames: Record<FlavorId, string> = { mango: 'Mango', strawberry: 'Strawberry', blueberry: 'Blueberry', banana: 'Banana', kiwi: 'Kiwi', tomato: 'Tomato' };
+let pouchSequence = 0;
+
+export function pouch(kind: FlavorId, className = ''): string {
+  const index = spriteOrder.indexOf(kind);
+  const column = index % 3;
+  const row = Math.floor(index / 3);
+  const columnLeft = [108, 552, 1000][column];
+  const clipId = `pouch-window-${kind}-${pouchSequence++}`;
+  return `<svg class="pouch ${className}" viewBox="0 0 450 512" role="img" aria-label="KIIERO CRUNCH ${productNames[kind]} — packaging concept" data-flavor="${kind}">
+    <defs><clipPath id="${clipId}"><rect width="450" height="512" /></clipPath></defs>
+    <image href="${spriteUrl}" x="${-columnLeft}" y="${-row * 512}" width="1536" height="1024" preserveAspectRatio="none" clip-path="url(#${clipId})" />
   </svg>`;
 }
 

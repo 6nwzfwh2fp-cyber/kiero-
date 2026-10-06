@@ -26,10 +26,10 @@ The existing checkout is already isolated. Do not create an additional Git workt
 
 - `src/main.ts`: reusable section helpers, rendering, navigation, dialogs and scroll enhancement.
 - `src/catalog.ts`: typed flavor data. Every flavor has `coming-soon` availability.
-- `src/art.ts`: original SVG pouch concepts and ingredient illustrations.
+- `src/art.ts`: accessible product sprite views and SVG ingredient illustrations.
 - `src/newsletter.ts`: owner-provided public Brevo form URL and reusable iframe markup.
 - `src/style.css`: responsive styles, hover effects and reduced-motion support.
-- `public/`: favicon and social sharing artwork.
+- `public/`: favicon, social sharing artwork and the optimized six-pouch WebP sprite.
 
 The homepage typography and illustrations are bundled locally. The Brevo iframe independently loads its provider-managed resources. Decorative SVGs are hidden from assistive technology; product pouches have descriptive labels.
 
@@ -55,9 +55,11 @@ Flavor records have stable IDs and an optional `commerceId` for a future Shopify
 
 ## Launch placeholders
 
-Pouches and their 1.7 oz sizes are design concepts. Flavor ingredients remain provisional. The third hero pouch says **NEW FLAVOR / COMING SOON**, and its card says **MYSTERY FLAVOR**. Social buttons display an honest coming-soon dialog until official profile URLs are supplied. Footer links display pre-launch notices; these are not finalized legal policies. No unverified nutrition or certification claims are made.
+The six flavors are mango, strawberry (fresa), blueberry (arándano), banana, kiwi and tomato (tomate). The reference-derived black pouches retain the ingredient illustrations and product windows, with visible **KIIERO CRUNCH** branding. Their artwork was adapted with image generation to remove the source reference's certification/nutrition badges and weights. Packaging and final ingredients remain concepts; no weights, organic certification, vegan/gluten-free or other unconfirmed claims are displayed. All six products are Coming Soon, with no buying controls.
 
-The reference image was not available in the conversation when this version was built; artwork follows the written brand direction.
+One transparent 1536×1024 WebP sprite contains all six bags. SVG viewports display each complete pouch without separate image downloads. The development/standard production build caches the shared image; the single-file exporter embeds it once so GitHub Pages needs no additional product-image request. Source reference image generation output remains outside the checkout, and only the optimized web asset is committed.
+
+Social buttons display an honest coming-soon dialog until official profile URLs are supplied. Footer legal links show launch notices and signup privacy information.
 
 ## Browser checks
 

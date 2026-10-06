@@ -14,7 +14,6 @@ import { newsletterEmbed } from './newsletter';
 const logo = (className = '') => `<a class="wordmark ${className}" href="#home" aria-label="KIIERO CRUNCH home"><span>KIIERO<span class="logo-dot" aria-hidden="true">✷</span></span><span>CRUNCH</span></a>`;
 const socialButtons = () => `<button class="social-button" data-dialog="instagram" aria-label="Instagram — coming soon">${icon('instagram')}</button><button class="social-button" data-dialog="tiktok" aria-label="TikTok — coming soon">${icon('tiktok')}</button>`;
 const cta = (label = 'JOIN THE LIST', className = '') => `<a class="button ${className}" href="#join">${label}${icon('arrow')}</a>`;
-const kindForIndex = (index: number): 'tropical' | 'spicy' | 'mystery' => (['tropical', 'spicy', 'mystery'] as const)[index];
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <a class="skip-link" href="#main">Skip to content</a>
@@ -46,13 +45,13 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       </div>
       <div class="hero-visual">
         <div class="hero-ring ring-one"></div><div class="hero-ring ring-two"></div>
-        <div class="hero-doodle hero-pineapple">${fruit('tropical')}</div>
-        <div class="hero-doodle hero-pepper">${fruit('spicy')}</div>
+        <div class="hero-doodle hero-mango">${fruit('mango')}</div>
+        <div class="hero-doodle hero-tomato">${fruit('tomato')}</div>
         <div class="little-stars" aria-hidden="true">✧<span>✷</span></div>
         <div class="hero-packs">
-          <div class="hero-pack pack-spicy">${pouch('spicy')}</div>
-          <div class="hero-pack pack-mystery">${pouch('mystery')}</div>
-          <div class="hero-pack pack-tropical">${pouch('tropical')}</div>
+          <div class="hero-pack pack-strawberry">${pouch('strawberry')}</div>
+          <div class="hero-pack pack-blueberry">${pouch('blueberry')}</div>
+          <div class="hero-pack pack-mango">${pouch('mango')}</div>
         </div>
         <div class="crunch-stamp"><span>NOT YOUR</span><strong>AVERAGE<br>SNACK.</strong><span>AND THAT'S THE POINT.</span></div>
         <div class="hero-caption"><span class="caption-arrow" aria-hidden="true">↳</span> your snack drawer<br> is about to get interesting.</div>
@@ -67,16 +66,16 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
     <section id="flavors" class="flavors-section container section-space">
       <div class="section-heading reveal">
-        <div><p class="eyebrow">THREE BAGS. ZERO BORING.</p><h2>PICK YOUR <span class="marker heading-mark">CRUNCH.</span></h2></div>
+        <div><p class="eyebrow">SIX FLAVORS. ZERO BORING.</p><h2>PICK YOUR <span class="marker heading-mark">CRUNCH.</span></h2></div>
         <p class="section-intro">Big personalities. Unexpected combinations.<br>Your usual snacks could never.</p>
       </div>
       <div class="flavor-grid">
         ${flavors.map((flavor, index) => `<article class="flavor-card reveal" style="--flavor-color:${flavor.color};--delay:${index * 90}ms">
-          <div class="flavor-visual flavor-${kindForIndex(index)}">
+          <div class="flavor-visual flavor-${flavor.id}">
             <div class="card-topline"><span>0${index + 1} / ${flavor.label}</span><span class="card-orbit" aria-hidden="true">✷</span></div>
-            <span class="flavor-background-word" aria-hidden="true">${['TROPICAL', 'FIRE.', '???'][index]}</span>
-            <div class="card-fruit">${fruit(kindForIndex(index))}</div>
-            ${pouch(kindForIndex(index), 'card-pouch')}
+            <span class="flavor-background-word" aria-hidden="true">${flavor.backgroundWord}</span>
+            <div class="card-fruit">${fruit(flavor.id)}</div>
+            ${pouch(flavor.id, 'card-pouch')}
             <span class="coming-tag">COMING SOON</span>
           </div>
           <div class="flavor-content">
@@ -84,7 +83,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
             <h3 class="marker">${flavor.name}</h3>
             <p class="flavor-description">${flavor.description}</p>
             <p class="flavor-ingredients">${flavor.ingredients}</p>
-            <a class="card-link" href="#join">${index === 2 ? 'KEEP ME IN THE LOOP' : 'I WANT FIRST DIBS'} ${icon('arrow')}</a>
+            <a class="card-link" href="#join">I WANT FIRST DIBS ${icon('arrow')}</a>
           </div>
         </article>`).join('')}
       </div>
@@ -110,7 +109,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <div class="story-art reveal" aria-hidden="true">
           <span class="story-curved">A LITTLE WEIRD. A LOT OF WOW.</span>
           <div class="story-burst">${burst}<div>SNACK<br><span class="marker">outside</span><br>THE BOX.</div></div>
-          <div class="story-fruit">${fruit('tropical')}</div>
+          <div class="story-fruit">${fruit('mango')}</div>
           <span class="story-spark">✷</span><span class="story-signature marker">made for the<br>“one more bite” people.</span>
         </div>
         <div class="story-copy reveal">

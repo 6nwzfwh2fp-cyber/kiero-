@@ -32,7 +32,17 @@ async def main():
         await page.goto(BASE_URL, wait_until="networkidle")
         assert await page.title() == "KIIERO CRUNCH | Crunch Different"
         assert await page.locator("main > section").count() == 6
-        assert await page.locator(".flavor-card").count() == 3
+        assert await page.locator(".flavor-card").count() == 6
+        assert await page.locator(".flavor-content h3").all_text_contents() == [
+            "MANGO", "STRAWBERRY", "BLUEBERRY", "BANANA", "KIWI", "TOMATO"
+        ]
+        assert await page.locator(".flavor-card .pouch").count() == 6
+        assert await page.locator(".hero-pack .pouch").count() == 3
+        assert all("KIIERO CRUNCH" in label for label in await page.locator(".pouch").evaluate_all("els => els.map(el => el.getAttribute('aria-label'))"))
+        assert await page.locator(".coming-tag").count() == 6
+        visible_copy = await page.locator("body").inner_text()
+        for old_text in ["ISLAND CRUSH", "HOT MESS", "MYSTERY FLAVOR", "1.7 OZ", "48g", "100% ORGANIC", "NET WT"]:
+            assert old_text not in visible_copy, old_text
         assert await page.locator(".benefit").count() == 4
 
         for width in [320, 360, 375, 390, 430, 600, 768, 900, 1024, 1440, 1920]:
